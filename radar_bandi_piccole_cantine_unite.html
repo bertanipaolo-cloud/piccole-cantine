@@ -123,7 +123,7 @@ input[type="search"]{flex:1;min-width:0}
 .count{font-size:13px;color:var(--ink-3);margin:0 0 12px}
 
 /* cards */
-.card{background:var(--sheet);border:1px solid var(--ring);border-radius:12px;padding:16px 18px;margin-bottom:10px;scroll-margin-top:20px}
+.card{background:var(--sheet);border:1px solid var(--ring);border-radius:12px;padding:16px 18px;margin-bottom:10px;scroll-margin-top:120px}
 .card.urgent{box-shadow:inset 3px 0 0 var(--crit)}
 .card:target{outline:2px solid var(--must)}
 .chead{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:baseline}
@@ -190,6 +190,17 @@ details.dead li{margin-bottom:6px} details.dead li b{color:var(--ink)}
 .xm{font-size:12px;color:var(--ink-3);grid-column:1/-1}
 .xd{font:500 12px var(--f-data);white-space:nowrap;text-align:right}
 .xd.hot{color:var(--crit)}
+
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;flex-wrap:wrap;margin:24px 0 4px;padding:8px;background:var(--ground);border:1px solid var(--ring);border-radius:14px;box-shadow:0 6px 18px -14px rgba(0,0,0,.35)}
+.tabs button{flex:1 1 auto;border:1px solid transparent;background:transparent;color:var(--ink-2);font:600 13px/1.2 var(--f-display);letter-spacing:.08em;text-transform:uppercase;padding:11px 14px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.tabs button:hover{background:var(--sheet);color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--forest);color:var(--ground);border-color:var(--forest)}
+.tabs button i{font:500 11px var(--f-data);font-style:normal;opacity:.75}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ground)}
+.tab[hidden]{display:none!important}
+.tab > h2:first-child{margin-top:26px}
+.xgrid.two{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+@media (max-width:640px){.tabs{overflow-x:auto;flex-wrap:nowrap}.tabs button{flex:0 0 auto;font-size:12px;padding:9px 11px}}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3);max-width:90ch}
 @media (max-width:640px){h1{font-size:22px}.htext{border-left:0;padding-left:0}.logo{width:170px}}
 @media (prefers-reduced-motion:no-preference){.card{transition:box-shadow .2s}}
@@ -213,6 +224,17 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-si
     <button type="button" class="tbtn" id="themeBtn">Theme</button>
   </div>
 </header>
+
+<nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
+  <button type="button" role="tab" data-tab="prio"><span class="bi" lang="en">Priorities &amp; deadlines</span><span class="bi" lang="it">Priorità e scadenze</span></button>
+  <button type="button" role="tab" data-tab="export"><span class="bi" lang="en">Export</span><span class="bi" lang="it">Export</span></button>
+  <button type="button" role="tab" data-tab="gruppo"><span class="bi" lang="en">Group or single winery</span><span class="bi" lang="it">Collettivo o singola cantina</span></button>
+  <button type="button" role="tab" data-tab="regioni"><span class="bi" lang="en">By region</span><span class="bi" lang="it">Per regione</span></button>
+  <button type="button" role="tab" data-tab="db"><span class="bi" lang="en">Full database</span><span class="bi" lang="it">Database completo</span><i id="dbCount"></i></button>
+  <button type="button" role="tab" data-tab="cal"><span class="bi" lang="en">Calendar &amp; method</span><span class="bi" lang="it">Calendario e metodo</span></button>
+</nav>
+
+<section class="tab" data-tab="prio">
 
 <div class="tiles" id="tiles"></div>
 
@@ -260,6 +282,8 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-si
 
 </div>
 
+</section>
+<section class="tab" data-tab="export">
 <h2><span class="bi" lang="en">Export grants</span><span class="bi" lang="it">Grant per l'export</span></h2>
 <div class="xintro">
   <span class="bi" lang="en">Everything that helps the wineries sell abroad, grouped by what it pays for. <b>Check each winery's main activity code first</b>: SIMEST, several regional fair grants and many Chamber of Commerce calls exclude farms registered under 01.21 (grape growing) but accept 11.02 (wine production). ICE services, EU missions, the EEN network and ICE interns have no such limit.</span>
@@ -267,6 +291,17 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-si
 </div>
 <div class="xgrid" id="xgrid"></div>
 
+</section>
+<section class="tab" data-tab="gruppo">
+<h2><span class="bi" lang="en">For the collective, or for each winery</span><span class="bi" lang="it">Per il collettivo o per la singola cantina</span></h2>
+<div class="xintro">
+  <span class="bi" lang="en">Left: measures where the group matters, because they are open only to groups and partners or favour them. Right: measures a winery can use on its own. Measures open to both appear in both columns. Click any row for the full card.</span>
+  <span class="bi" lang="it">A sinistra le misure in cui il gruppo conta, perché riservate a gruppi e partner o perché li favoriscono. A destra quelle che una cantina può usare da sola. Le misure aperte a entrambi compaiono in tutte e due le colonne. Ogni riga apre la scheda completa.</span>
+</div>
+<div class="frow" style="margin-bottom:12px"><span class="flabel">Status</span><span id="gSt"></span></div>
+<div class="xgrid two" id="ggrid"></div>
+</section>
+<section class="tab" data-tab="regioni">
 <h2><span class="bi" lang="en">Region by region — the three wine CMO calls</span><span class="bi" lang="it">Regione per regione — i tre bandi OCM vino</span></h2>
 <div class="mapwrap"><table class="map" id="map"></table></div>
 <div class="maplegend">
@@ -278,6 +313,11 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-si
   <span class="bi" lang="it">Clicca una regione per filtrare l'elenco. Clicca uno stato per aprire la scheda.</span>
 </div>
 
+<h2 id="regHead"><span class="bi" lang="en">Measures in one region</span><span class="bi" lang="it">Le misure di una regione</span></h2>
+<div class="frow" style="margin-bottom:12px"><select id="regSel" aria-label="Region"></select><span class="count" id="regNote" style="margin:0"></span></div>
+<div class="xgrid two" id="regGrid"></div>
+</section>
+<section class="tab" data-tab="db">
 <h2><span class="bi" lang="en">All measures</span><span class="bi" lang="it">Tutte le misure</span></h2>
 <div class="legend">
   <span class="bi" lang="en"><b>Verification badge.</b> Each source was reopened on <span class="vdate"></span>.
@@ -287,10 +327,7 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-si
   <ul><li><b>✓ confermata</b>: pagina ufficiale aperta, dati corrispondenti.</li><li><b>fonte secondaria</b>: stampa specializzata concordante, pagina ufficiale non raggiungibile; da riverificare prima di impegnarci lavoro.</li><li><b>previsione</b>: data o regola ricostruita dall'edizione precedente; serve a presidiare, non a pianificare.</li></ul>
   Ogni scheda ha una sintesi in inglese; il dettaglio tecnico in italiano si apre sotto.</span>
 </div>
-<div class="legend">
-  <b class="bi" lang="en">How sources are monitored</b><b class="bi" lang="it">Come vengono monitorate le fonti</b>
-  <table class="mon" id="mon"></table>
-</div>
+
 <div class="filters">
   <div class="frow"><span class="flabel">Region</span>
     <select id="fReg" aria-label="Region"></select>
@@ -305,14 +342,23 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-si
 <p class="count" id="count"></p>
 <div id="cards"></div>
 
+</section>
+<section class="tab" data-tab="cal">
 <h2><span class="bi" lang="en">Calendar — what opens or closes when</span><span class="bi" lang="it">Calendario — cosa apre o chiude e quando</span></h2>
 <ol class="cal" id="cal"></ol>
+<h2><span class="bi" lang="en">How sources are monitored</span><span class="bi" lang="it">Come vengono monitorate le fonti</span></h2>
+<div class="legend">
+  
+  <table class="mon" id="mon"></table>
+</div>
 
 <h2><span class="bi" lang="en">Checked and set aside</span><span class="bi" lang="it">Verificato e scartato</span></h2>
 <details class="dead">
   <summary id="deadSum"></summary>
   <ul id="dead"></ul>
 </details>
+
+</section>
 
 <footer>
   <span class="bi" lang="en">Compiled on <span class="vdate"></span> from official sources (European Commission, REA, EUR-Lex, MASAF, AGEA, regional agriculture departments and paying agencies, Gazzetta Ufficiale and regional bulletins, ISMEA, ICE, SIMEST) and, where marked, specialist press. Every card links its source. Amounts and rates are orders of magnitude to decide where to look: always read the call itself. Updated every Monday; Rhona receives a summary of what changed.</span>
@@ -496,18 +542,61 @@ function exportGrid(){
   }).join("");
 }
 function monTable(){document.getElementById("mon").innerHTML=[1,2,3,4].map(k=>`<tr><td>P${k}</td><td>${esc(L(PRIO[k][0],PRIO[k][1]))} <span style="color:var(--ink-3)">· ${M.filter(m=>m.prio==k).length} ${L("measures","misure")}</span></td><td>${esc(L(PRIO[k][2],PRIO[k][3]))}</td></tr>`).join("");}
+
+const RANK={aperto:0,sportello:1,atteso:2,incerto:3};
+const sortM=(a,b)=>(RANK[a.st]-RANK[b.st])||(a.prio-b.prio)||((isDeadline(a)?a.d:"9")>(isDeadline(b)?b.d:"9")?1:-1);
+function rowHTML(m,showMode){
+  const n=isDeadline(m)?days(m.d):null;
+  const where=m.reg.includes("Tutte")?L("Italy-wide","Tutta Italia"):m.reg.join(", ");
+  const extra=[m.amt?`${L("max","max")} ${fmtEur(m.amt)}`:"", showMode?L(...MODE_S[m.mode]):""].filter(Boolean).join(" · ");
+  return `<a class="xrow" href="#${m.id}" data-jump="${m.id}"><span class="xn">${esc(LANG==="it"?m.n:m.n_en)}</span><span class="xd ${n!==null&&n<=14?"hot":""}">${n!==null?fdate(m.d):""}</span><span class="xm"><span class="pill" data-st="${m.st}" style="font-size:11px;padding:0 7px">${esc(L(...ST[m.st]))}</span> ${esc(where)}${extra?" · "+esc(extra):""}</span></a>`;
+}
+const gstate={st:"all"};
+function groupTab(){
+  document.getElementById("gSt").innerHTML=[["all","All","Tutte"],["now","Open or rolling","Aperte o a sportello"],["atteso","Expected","Attese"]].map(([k,en,it])=>`<button type="button" class="chip" data-g="${k}" aria-pressed="${gstate.st===k}">${esc(L(en,it))}</button>`).join(" ");
+  const okSt=m=>gstate.st==="all"||(gstate.st==="now"?(m.st==="aperto"||m.st==="sportello"):m.st===gstate.st);
+  const col=(title,sub,list)=>`<div class="xcol"><h3>${esc(title)} · ${list.length}</h3><p class="xsub">${esc(sub)}</p>${list.map(m=>rowHTML(m,true)).join("")}</div>`;
+  const g=M.filter(m=>(m.mode==="gruppo"||m.mode==="entrambi")&&okSt(m)).sort(sortM);
+  const s=M.filter(m=>(m.mode==="singola"||m.mode==="entrambi")&&okSt(m)).sort(sortM);
+  document.getElementById("ggrid").innerHTML=col(L("For the collective","Per il collettivo"),L("Group or partner only, or groups favoured. This is where promotion, shared fair stands, wine tourism and research sit.","Solo in gruppo o come partner, oppure con i gruppi favoriti. Qui stanno promozione, fiere in forma aggregata, enoturismo e ricerca."),g)+col(L("For each winery","Per la singola cantina"),L("Each winery can apply on its own: cellar and vineyard investments, rural development and local LEADER calls, SIMEST, ICE services, tax credits.","Ogni cantina può presentare da sola: investimenti in cantina e vigneto, sviluppo rurale e GAL della propria zona, SIMEST, servizi ICE, crediti d'imposta."),s);
+}
+let REGSEL="";
+function regionTab(){
+  const sel=document.getElementById("regSel");
+  let o=`<option value="">${L("Choose a region","Scegli una regione")}</option>`;
+  for(const [en,it,list] of REGIONS){o+=`<optgroup label="${esc(L(en,it))}">`+list.map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join("")+`</optgroup>`;}
+  sel.innerHTML=o; sel.value=REGSEL;
+  const grid=document.getElementById("regGrid"), note=document.getElementById("regNote");
+  if(!REGSEL){grid.innerHTML="";note.textContent=L("Pick a region, or click its name in the table above.","Scegli una regione, oppure clicca il nome nella tabella qui sopra.");return;}
+  const own=M.filter(m=>!m.reg.includes("Tutte")&&m.reg.includes(REGSEL)).sort(sortM);
+  const nat=M.filter(m=>m.reg.includes("Tutte")&&(m.st==="aperto"||m.st==="sportello")).sort(sortM);
+  note.textContent=L(`${own.length} measures specific to ${REGSEL}, plus ${nat.length} Italy-wide measures open now.`,`${own.length} misure specifiche per ${REGSEL}, più ${nat.length} misure nazionali o UE aperte ora.`);
+  grid.innerHTML=`<div class="xcol"><h3>${esc(REGSEL)}</h3><p class="xsub">${L("Regional calls: CMO, rural development, LEADER, export","Bandi regionali: OCM, sviluppo rurale, GAL, export")}</p>${own.map(m=>rowHTML(m,true)).join("")||`<p class="xsub">${L("None mapped yet.","Nessuna misura mappata.")}</p>`}</div><div class="xcol"><h3>${L("Also open, Italy-wide","Aperte anche, in tutta Italia")}</h3><p class="xsub">${L("National and EU measures any winery here can use now","Misure nazionali e UE utilizzabili ora da qualsiasi cantina")}</p>${nat.map(m=>rowHTML(m,true)).join("")}</div>`;
+}
+const TABS=["prio","export","gruppo","regioni","db","cal"];
+let TAB="prio";
+function showTab(t,scroll){
+  if(!TABS.includes(t))t="prio"; TAB=t;
+  document.querySelectorAll("section.tab").forEach(s=>s.hidden=s.dataset.tab!==t);
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===t)));
+  try{localStorage.setItem("pcu-tab",t);}catch(e){}
+  try{history.replaceState(null,"","#"+t);}catch(e){}
+  if(scroll){const n=document.getElementById("tabs");window.scrollTo({top:n.getBoundingClientRect().top+window.scrollY-8,behavior:"smooth"});}
+}
+document.getElementById("tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-tab]");if(b)showTab(b.dataset.tab,true);});
 function renderAll(){
   const dEn=fdate(OGGI); document.getElementById("updEn").textContent=dEn;
   const x=new Date(OGGI+"T00:00:00"); const dIt=x.getDate()+" "+["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"][x.getMonth()]+" "+x.getFullYear();
   document.getElementById("updIt").textContent=dIt;
   document.querySelectorAll(".vdate").forEach(e=>e.textContent=LANG==="it"?dIt:dEn);
-  tiles(); nowList(); exportGrid(); mapTable(); monTable(); filters(); cards(); calendar();
+  tiles(); nowList(); exportGrid(); groupTab(); mapTable(); regionTab(); monTable(); filters(); cards(); calendar(); document.getElementById("dbCount").textContent=M.length;
 }
 
 document.addEventListener("click",e=>{
   const c=e.target.closest(".chip[data-f]"); if(c){state[c.dataset.f]=c.dataset.v; filters(); cards(); return;}
-  const r=e.target.closest("button[data-reg]"); if(r){state.reg=r.dataset.reg; filters(); cards(); document.querySelector(".filters").scrollIntoView({behavior:"smooth",block:"start"}); return;}
-  const j=e.target.closest("[data-jump]"); if(j){
+  const g=e.target.closest("[data-g]"); if(g){gstate.st=g.dataset.g; groupTab(); return;}
+  const r=e.target.closest("button[data-reg]"); if(r){REGSEL=r.dataset.reg; regionTab(); document.getElementById("regHead").scrollIntoView({behavior:"smooth",block:"start"}); return;}
+  const j=e.target.closest("[data-jump]"); if(j){ showTab("db");
     e.preventDefault(); const id=j.dataset.jump;
     if(!document.getElementById(id)){state.reg="all";state.cat="all";state.st="all";state.q="";state.mode="all";state.amt="all";state.prio="all";document.getElementById("fQ").value="";filters();cards();}
     const el=document.getElementById(id); el.scrollIntoView({behavior:"smooth",block:"start"});
@@ -519,6 +608,8 @@ document.getElementById("fReg").addEventListener("change",e=>{state.reg=e.target
 document.getElementById("fQ").addEventListener("input",e=>{state.q=e.target.value;cards();});
 document.documentElement.setAttribute("data-lang",LANG);
 document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===LANG)));
+document.getElementById("regSel").addEventListener("change",e=>{REGSEL=e.target.value;regionTab();});
 renderAll();
+(function(){let t=(location.hash||"").slice(1); if(!TABS.includes(t)){try{t=localStorage.getItem("pcu-tab")||"prio";}catch(e){t="prio";}} showTab(t,false);})();
 </script>
 </body></html>
