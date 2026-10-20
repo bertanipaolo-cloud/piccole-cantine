@@ -1,0 +1,310 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Piccole Cantine Unite insieme</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single 16:9 stage that plays scene after scene, like a short film; controls sit under it. Palette and rings come from the collective's leaflet. */
+:root{
+  --ground:#e7e5de; --stage:#f1efe8; --ink:#22382b; --ink-2:#4e5f53; --ink-3:#7f8a80; --rule:#d3d0c5;
+  --vine:#86a046; --vine-d:#5c7a2c; --forest:#3f6b4f; --must:#d9a52b; --must-d:#9a6f0e; --crit:#b23a2b;
+  --f-display:"Josefin Sans","Century Gothic","Avenir Next",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#121713; --stage:#1a211c; --ink:#ece9df; --ink-2:#bcc3b8; --ink-3:#8b958a; --rule:#2e3830;
+    --vine:#a6c165; --vine-d:#b6cf7a; --forest:#8fbf9c; --must:#e6b94a; --must-d:#e6b94a; --crit:#e8705f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#121713; --stage:#1a211c; --ink:#ece9df; --ink-2:#bcc3b8; --ink-3:#8b958a; --rule:#2e3830;
+  --vine:#a6c165; --vine-d:#b6cf7a; --forest:#8fbf9c; --must:#e6b94a; --must-d:#e6b94a; --crit:#e8705f;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stage{position:relative;width:100%;aspect-ratio:16/9;background:var(--stage);border-radius:14px;overflow:hidden;border:1px solid var(--rule)}
+@media (max-width:760px){.stage{aspect-ratio:auto;height:min(78vh,640px);min-height:520px}}
+.scene{position:absolute;inset:0;padding:5.5% 6.5%;display:flex;flex-direction:column;justify-content:center;gap:2.2vmin;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility 0s .6s}
+.scene.on{opacity:1;visibility:visible;transition:opacity .6s ease}
+.eyebrow{font:600 clamp(11px,1.15vw,14px)/1 var(--f-display);letter-spacing:.22em;text-transform:uppercase;color:var(--vine-d)}
+h1,h2{font-family:var(--f-display);font-weight:300;margin:0;line-height:1.08;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:clamp(30px,5.6vw,72px)}
+h2{font-size:clamp(24px,3.6vw,48px)}
+h1 b,h2 b{font-weight:600;color:var(--forest)}
+p.lead{font-size:clamp(15px,1.6vw,21px);color:var(--ink-2);max-width:44ch;margin:0}
+.lang-it,.lang-en{display:contents}
+html[data-lang="it"] .lang-en, html[data-lang="en"] .lang-it{display:none}
+
+/* reveal: children with .r appear in sequence when the scene is on */
+.r{opacity:0;transform:translateY(14px)}
+.scene.on .r{animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d,0) * 1s)}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* rings motif */
+.rings{position:absolute;right:-6%;top:50%;width:52%;aspect-ratio:1;transform:translateY(-50%);pointer-events:none}
+.rings path{fill:none;stroke:var(--vine);stroke-width:2.2;stroke-linecap:round;opacity:.0;transform-origin:50% 50%}
+.scene.on .rings path{animation:ring 1.4s ease-out forwards;animation-delay:calc(var(--i) * .22s)}
+@keyframes ring{from{opacity:0;transform:scale(.6) rotate(-8deg)}to{opacity:.85;transform:none}}
+
+/* chips grid of regions */
+.regs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1vmin;max-width:760px}
+.regs span{font:500 clamp(10px,1vw,13px)/1 var(--f-data);padding:1.1vmin .6vmin;border:1px solid var(--rule);border-radius:6px;text-align:center;color:var(--ink-2);background:var(--ground)}
+.scene.on .regs span{animation:flick 2.6s ease-in-out infinite;animation-delay:calc(var(--i) * .13s)}
+@keyframes flick{0%,100%{border-color:var(--rule)}50%{border-color:var(--must);color:var(--ink)}}
+.rules{display:flex;gap:1vmin;flex-wrap:wrap}
+.rules span{font:clamp(11px,1.05vw,14px) var(--f-body);background:var(--ink);color:var(--stage);padding:.6vmin 1.2vmin;border-radius:99px}
+
+/* threshold bars */
+.bars{display:grid;gap:1.6vmin;max-width:820px;width:100%}
+.barrow{display:grid;grid-template-columns:minmax(90px,20%) 1fr;gap:1.4vmin;align-items:center}
+.barrow .lbl{font:500 clamp(11px,1.1vw,14px) var(--f-body);color:var(--ink-2)}
+.track{position:relative;height:clamp(18px,3.4vmin,30px);border-radius:6px;background:var(--ground)}
+.line{position:absolute;top:-1vmin;bottom:-1vmin;left:72%;border-left:2px dashed var(--crit)}
+.line i{position:absolute;top:-3.2vmin;left:6px;white-space:nowrap;font:500 clamp(10px,1vw,13px) var(--f-data);color:var(--crit);font-style:normal}
+.fill{height:100%;border-radius:6px;background:var(--vine);width:0}
+.scene.on .fill.one{animation:grow1 1.2s .8s ease-out forwards}
+@keyframes grow1{to{width:9%}}
+.stack{display:flex;height:100%;gap:2px}
+.stack b{flex:0 0 7.6%;background:var(--forest);border-radius:4px;opacity:0;transform:scaleX(.2);transform-origin:left}
+.scene.on .stack b{animation:seg .35s ease-out forwards;animation-delay:calc(1.8s + var(--i) * .22s)}
+@keyframes seg{to{opacity:1;transform:none}}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:1.6vmin;max-width:900px}
+.fact{border-top:2px solid var(--vine);padding-top:1.2vmin}
+.fact .n{font:300 clamp(22px,3vw,40px)/1 var(--f-display);color:var(--forest);font-variant-numeric:tabular-nums}
+.fact .t{font-size:clamp(12px,1.15vw,15px);color:var(--ink-2);margin-top:.8vmin}
+
+/* convergence: dots to case */
+.conv{position:relative;width:min(56%,560px);aspect-ratio:5/3;align-self:flex-end;margin-top:-2vmin}
+.conv .dot{position:absolute;width:12%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font:600 clamp(9px,.9vw,12px) var(--f-display);letter-spacing:.06em;color:#fff;transition:none}
+.scene.on .conv .dot{animation:gather 1.6s cubic-bezier(.5,0,.2,1) forwards;animation-delay:calc(1.2s + var(--i) * .08s)}
+@keyframes gather{to{left:var(--tx);top:var(--ty);border-radius:8px}}
+.case{position:absolute;left:19%;top:22%;width:70%;height:62%;border:2px solid var(--ink-3);border-radius:10px;opacity:0}
+.scene.on .case{animation:fadein .6s 2.9s forwards}
+@keyframes fadein{to{opacity:1}}
+.case i{position:absolute;bottom:-4vmin;left:0;right:0;text-align:center;font:500 clamp(10px,1vw,13px) var(--f-data);color:var(--ink-2);font-style:normal}
+
+/* two paths */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:2vmin;max-width:980px}
+.path{border:1px solid var(--rule);background:var(--ground);border-radius:12px;padding:2.2vmin 2.4vmin}
+.path h3{font:600 clamp(13px,1.4vw,18px)/1.25 var(--f-display);letter-spacing:.04em;margin:0 0 1vmin}
+.path .big{font:300 clamp(30px,4.6vw,62px)/1 var(--f-display);font-variant-numeric:tabular-nums}
+.path.g .big{color:var(--must-d)} .path.s .big{color:var(--forest)}
+.path p{margin:1vmin 0 0;font-size:clamp(12px,1.15vw,15px);color:var(--ink-2)}
+.path .chip{display:inline-block;margin-top:1.2vmin;font:500 clamp(10px,1vw,13px) var(--f-data);border:1px solid currentColor;border-radius:99px;padding:.3vmin 1vmin}
+@media (max-width:760px){.paths{grid-template-columns:1fr}.regs{grid-template-columns:repeat(5,minmax(0,1fr))}.rings{width:80%;right:-30%;opacity:.5}.conv{width:100%;align-self:stretch}}
+
+.ui{display:flex;gap:1.4vmin;flex-wrap:wrap;max-width:980px}
+.ui span{font:500 clamp(11px,1.1vw,14px) var(--f-body);border:1px solid var(--rule);border-radius:99px;padding:.7vmin 1.4vmin;background:var(--ground)}
+.ui span.k{background:var(--ink);color:var(--stage);border-color:var(--ink)}
+.link{font:500 clamp(13px,1.4vw,18px) var(--f-data);color:var(--forest);word-break:break-all;user-select:all}
+ol.next{margin:0;padding-left:1.2em;font-size:clamp(13px,1.3vw,17px);color:var(--ink-2);display:grid;gap:.8vmin;max-width:60ch}
+ol.next b{color:var(--ink)}
+
+/* controls */
+.bar{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.bar button{font:600 12px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;background:var(--stage);color:var(--ink);border:1px solid var(--rule);border-radius:99px;padding:9px 14px;cursor:pointer}
+.bar button:focus-visible{outline:2px solid var(--must);outline-offset:2px}
+.prog{flex:1;display:flex;gap:4px;min-width:160px}
+.prog button{all:unset;cursor:pointer;flex:1;height:6px;border-radius:3px;background:var(--rule);position:relative;overflow:hidden}
+.prog button:focus-visible{outline:2px solid var(--must)}
+.prog button i{position:absolute;inset:0;width:0;background:var(--vine)}
+.prog button.done i{width:100%}
+.cap{font-size:13px;color:var(--ink-3);margin-top:10px}
+@media (prefers-reduced-motion:reduce){.r,.rings path,.stack b,.conv .dot,.case{animation:none!important;opacity:1!important;transform:none!important}.scene.on .fill.one{animation:none;width:9%}.conv .dot{left:var(--tx)!important;top:var(--ty)!important}.regs span{animation:none!important}}
+</style>
+
+<div class="wrap">
+<div class="stage" id="stage" aria-live="polite">
+
+  <!-- 1 -->
+  <section class="scene" data-dur="7">
+    <svg class="rings" viewBox="0 0 200 200" aria-hidden="true">
+      <path style="--i:0" d="M100 62c22 0 34 14 33 36s-14 40-35 40-34-16-33-38 13-38 35-38z"/>
+      <path style="--i:1" d="M100 44c32 0 52 22 50 54s-22 58-52 58-50-24-49-56 19-56 51-56z"/>
+      <path style="--i:2" d="M101 26c42 0 69 30 67 72s-30 78-70 78-68-32-66-74 27-76 69-76z"/>
+      <path style="--i:3" d="M100 8c52 0 87 38 85 90s-38 98-88 98-86-40-84-92 35-96 87-96z"/>
+    </svg>
+    <div class="eyebrow r" style="--d:.2">Piccole Cantine Unite</div>
+    <h1 class="r" style="--d:.5"><span class="lang-it">Tante piccole cantine,<br><b>una voce sola</b> all'estero</span><span class="lang-en">Many small wineries,<br><b>one voice</b> abroad</span></h1>
+    <p class="lead r" style="--d:1.1"><span class="lang-it">Perché ci serve muoverci come gruppo, per i fondi e per l'export, e lo strumento che abbiamo costruito per farlo.</span><span class="lang-en">Why we need to move as a group, for funding and for export, and the tool we built to do it.</span></p>
+  </section>
+
+  <!-- 2 -->
+  <section class="scene" data-dur="8">
+    <div class="eyebrow r"><span class="lang-it">Chi siamo</span><span class="lang-en">Who we are</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">Dieci-quindici cantine, <b>regioni diverse</b>, lo stesso modo di lavorare</span><span class="lang-en">Ten to fifteen wineries, <b>different regions</b>, the same way of working</span></h2>
+    <div class="facts">
+      <div class="fact r" style="--d:1"><div class="n">10-15</div><div class="t"><span class="lang-it">piccole cantine, proprietarie dei loro vigneti</span><span class="lang-en">small estates that own their vineyards</span></div></div>
+      <div class="fact r" style="--d:1.4"><div class="n">bio</div><div class="t"><span class="lang-it">viticoltura biologica o biodinamica, intervento minimo in cantina</span><span class="lang-en">organic or biodynamic farming, minimal intervention in the cellar</span></div></div>
+      <div class="fact r" style="--d:1.8"><div class="n">1</div><div class="t"><span class="lang-it">punto di riferimento verso gli importatori: Rhona</span><span class="lang-en">single contact for importers: Rhona</span></div></div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="scene" data-dur="9">
+    <div class="eyebrow r"><span class="lang-it">Esigenza 1 · intercettare i fondi</span><span class="lang-en">Need 1 · catching the funding</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">I fondi ci sono, ma sono <b>sparsi su troppi livelli</b></span><span class="lang-en">The money exists, but it is <b>spread across too many levels</b></span></h2>
+    <div class="regs r" style="--d:.9" aria-label="21 regioni e province autonome">
+      <span style="--i:0">PIE</span><span style="--i:1">VDA</span><span style="--i:2">LOM</span><span style="--i:3">TN</span><span style="--i:4">BZ</span><span style="--i:5">VEN</span><span style="--i:6">FVG</span><span style="--i:7">LIG</span><span style="--i:8">EMR</span><span style="--i:9">TOS</span><span style="--i:10">UMB</span><span style="--i:11">MAR</span><span style="--i:12">LAZ</span><span style="--i:13">ABR</span><span style="--i:14">MOL</span><span style="--i:15">CAM</span><span style="--i:16">PUG</span><span style="--i:17">BAS</span><span style="--i:18">CAL</span><span style="--i:19">SIC</span><span style="--i:20">SAR</span>
+    </div>
+    <div class="rules r" style="--d:1.6"><span>UE</span><span>MASAF / AGEA</span><span><span class="lang-it">21 bandi OCM regionali</span><span class="lang-en">21 regional CMO calls</span></span><span>GAL</span><span><span class="lang-it">Camere di commercio</span><span class="lang-en">Chambers of commerce</span></span><span>ICE · SIMEST</span></div>
+    <p class="lead r" style="--d:2.2"><span class="lang-it">Le spese ammesse, le soglie e le scadenze OCM cambiano da regione a regione e da un anno all'altro. Da sola, una piccola cantina non riesce a seguirle tutte.</span><span class="lang-en">Eligible costs, thresholds and CMO deadlines change from region to region and from year to year. A small winery alone cannot keep up with all of them.</span></p>
+  </section>
+
+  <!-- 4 -->
+  <section class="scene" data-dur="10">
+    <div class="eyebrow r"><span class="lang-it">Esigenza 2 · le soglie</span><span class="lang-en">Need 2 · the thresholds</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">Molti bandi sono pensati <b>per chi è più grande</b> di noi</span><span class="lang-en">Many calls are built <b>for someone bigger</b> than us</span></h2>
+    <div class="bars r" style="--d:.6">
+      <div class="barrow"><span class="lbl"><span class="lang-it">Una cantina</span><span class="lang-en">One winery</span></span><div class="track"><div class="fill one"></div><div class="line"><i><span class="lang-it">soglia minima</span><span class="lang-en">minimum threshold</span></i></div></div></div>
+      <div class="barrow"><span class="lbl"><span class="lang-it">Il collettivo</span><span class="lang-en">The collective</span></span><div class="track"><div class="stack"><b style="--i:0"></b><b style="--i:1"></b><b style="--i:2"></b><b style="--i:3"></b><b style="--i:4"></b><b style="--i:5"></b><b style="--i:6"></b><b style="--i:7"></b><b style="--i:8"></b><b style="--i:9"></b></div><div class="line"></div></div></div>
+    </div>
+    <div class="facts">
+      <div class="fact r" style="--d:3.6"><div class="n">75.000 L</div><div class="t"><span class="lang-it">vino imbottigliato richiesto per la promozione OCM in Piemonte (150.000 in Sicilia)</span><span class="lang-en">bottled wine needed for CMO promotion in Piedmont (150,000 in Sicily)</span></div></div>
+      <div class="fact r" style="--d:4"><div class="n"><span class="lang-it">solo consorzi</span><span class="lang-en">consortia only</span></div><div class="t"><span class="lang-it">per il nuovo bando enoturismo e per i programmi UE AGRIP</span><span class="lang-en">for the new wine-tourism grant and EU AGRIP programmes</span></div></div>
+      <div class="fact r" style="--d:4.4"><div class="n">50.000 €</div><div class="t"><span class="lang-it">tetto de minimis agricolo in tre anni, per cantina</span><span class="lang-en">agricultural de minimis cap over three years, per winery</span></div></div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="scene" data-dur="10">
+    <div class="eyebrow r"><span class="lang-it">Esigenza 3 · l'export come gruppo</span><span class="lang-en">Need 3 · export as a group</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">All'estero conviene <b>presentarsi insieme</b></span><span class="lang-en">Abroad, it pays to <b>show up together</b></span></h2>
+    <div class="facts">
+      <div class="fact r" style="--d:1"><div class="n">1 stand</div><div class="t"><span class="lang-it">costi di fiera divisi; la Lombardia copre il 90% per gruppi di almeno 5 imprese</span><span class="lang-en">shared fair costs; Lombardy covers 90% for groups of at least 5 firms</span></div></div>
+      <div class="fact r" style="--d:1.4"><div class="n">1 <span class="lang-it">ordine</span><span class="lang-en">order</span></div><div class="t"><span class="lang-it">l'importatore consolida in un solo carico vini di regioni diverse</span><span class="lang-en">the importer consolidates wines from different regions in one shipment</span></div></div>
+      <div class="fact r" style="--d:1.8"><div class="n">1 export manager</div><div class="t"><span class="lang-it">una figura (o uno stagista ICE) che lavora per tutte le cantine</span><span class="lang-en">one person (or an ICE intern) working for all the wineries</span></div></div>
+    </div>
+    <p class="lead r" style="--d:2.6"><span class="lang-it">Il Regno Unito è extra UE, quindi rientra nella promozione OCM. Irlanda e mercati UE passano da ICE, SIMEST e bandi fiere.</span><span class="lang-en">The UK is outside the EU, so it qualifies for CMO promotion. Ireland and EU markets go through ICE, SIMEST and fair grants.</span></p>
+  </section>
+
+  <!-- 6 -->
+  <section class="scene" data-dur="10">
+    <div class="eyebrow r"><span class="lang-it">Esigenza 4 · cantine complementari</span><span class="lang-en">Need 4 · complementary wineries</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">Regioni, vitigni e stili diversi diventano <b>un'unica proposta</b></span><span class="lang-en">Different regions, grapes and styles become <b>one offer</b></span></h2>
+    <p class="lead r" style="--d:.8"><span class="lang-it">Per l'importatore valiamo di più insieme: un catalogo vario, scoperte fuori dai radar, un solo interlocutore. Nessuna cantina toglie spazio all'altra.</span><span class="lang-en">To an importer we are worth more together: a varied list, finds under the radar, one contact. No winery takes space from another.</span></p>
+    <div class="conv" aria-hidden="true">
+      <div class="case"><i><span class="lang-it">una cassa, 10-15 cantine</span><span class="lang-en">one case, 10–15 wineries</span></i></div>
+      <span class="dot" style="--i:0;left:2%;top:4%;background:#86a046;--tx:22%;--ty:27%"></span>
+      <span class="dot" style="--i:1;left:80%;top:2%;background:#3f6b4f;--tx:35%;--ty:27%"></span>
+      <span class="dot" style="--i:2;left:44%;top:0%;background:#d9a52b;--tx:48%;--ty:27%"></span>
+      <span class="dot" style="--i:3;left:90%;top:52%;background:#b0602f;--tx:61%;--ty:27%"></span>
+      <span class="dot" style="--i:4;left:8%;top:70%;background:#7a6a4a;--tx:74%;--ty:27%"></span>
+      <span class="dot" style="--i:5;left:60%;top:80%;background:#5c8a3a;--tx:22%;--ty:55%"></span>
+      <span class="dot" style="--i:6;left:28%;top:84%;background:#9b4f6a;--tx:35%;--ty:55%"></span>
+      <span class="dot" style="--i:7;left:70%;top:30%;background:#2f6f8f;--tx:48%;--ty:55%"></span>
+      <span class="dot" style="--i:8;left:20%;top:38%;background:#8a6d1f;--tx:61%;--ty:55%"></span>
+      <span class="dot" style="--i:9;left:48%;top:46%;background:#c0663a;--tx:74%;--ty:55%"></span>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="scene" data-dur="9">
+    <div class="eyebrow r"><span class="lang-it">Cosa ci serve, in pratica</span><span class="lang-en">What we need, in practice</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">Prima della primavera 2027, <b>tre cose</b></span><span class="lang-en">Before spring 2027, <b>three things</b></span></h2>
+    <div class="facts">
+      <div class="fact r" style="--d:1"><div class="n"><span class="lang-it">Forma</span><span class="lang-en">A legal form</span></div><div class="t"><span class="lang-it">ATI/ATS o rete d'impresa: è ciò che apre i bandi di promozione 2027/28 (attesi apr-mag 2027)</span><span class="lang-en">a temporary association or business network: this opens the 2027/28 promotion calls (expected Apr–May 2027)</span></div></div>
+      <div class="fact r" style="--d:1.5"><div class="n">ATECO</div><div class="t"><span class="lang-it">verificare per ogni cantina: 11.02 entra in SIMEST e in molti bandi export, 01.21 spesso no</span><span class="lang-en">check each winery: 11.02 qualifies for SIMEST and many export grants, 01.21 often does not</span></div></div>
+      <div class="fact r" style="--d:2"><div class="n"><span class="lang-it">Consorzi</span><span class="lang-en">Consortia</span></div><div class="t"><span class="lang-it">ogni cantina coinvolge il proprio consorzio DOC per enoturismo e AGRIP</span><span class="lang-en">each winery involves its DOC consortium for wine tourism and AGRIP</span></div></div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="scene" data-dur="9">
+    <svg class="rings" viewBox="0 0 200 200" aria-hidden="true">
+      <path style="--i:0" d="M100 62c22 0 34 14 33 36s-14 40-35 40-34-16-33-38 13-38 35-38z"/>
+      <path style="--i:1" d="M100 44c32 0 52 22 50 54s-22 58-52 58-50-24-49-56 19-56 51-56z"/>
+      <path style="--i:2" d="M101 26c42 0 69 30 67 72s-30 78-70 78-68-32-66-74 27-76 69-76z"/>
+    </svg>
+    <div class="eyebrow r"><span class="lang-it">Lo strumento</span><span class="lang-en">The tool</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">Da queste esigenze nasce il <b>Radar bandi</b></span><span class="lang-en">From these needs comes the <b>Funding Radar</b></span></h2>
+    <div class="facts" style="max-width:640px">
+      <div class="fact r" style="--d:1"><div class="n">150</div><div class="t"><span class="lang-it">misure mappate: UE, nazionali, tutte le 21 regioni e province autonome</span><span class="lang-en">measures mapped: EU, national, all 21 regions and autonomous provinces</span></div></div>
+      <div class="fact r" style="--d:1.4"><div class="n">28</div><div class="t"><span class="lang-it">opportunità export: fiere, persone, mercati, finanza</span><span class="lang-en">export opportunities: fairs, people, markets, finance</span></div></div>
+      <div class="fact r" style="--d:1.8"><div class="n"><span class="lang-it">lunedì</span><span class="lang-en">Mondays</span></div><div class="t"><span class="lang-it">fonti ricontrollate ogni settimana e mail di sintesi a Rhona</span><span class="lang-en">sources re-checked every week, summary email to Rhona</span></div></div>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="scene" data-dur="11">
+    <div class="eyebrow r"><span class="lang-it">Come si legge</span><span class="lang-en">How to read it</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">Due strade nello stesso strumento</span><span class="lang-en">Two paths in the same tool</span></h2>
+    <div class="paths">
+      <div class="path g r" style="--d:1"><h3><span class="lang-it">Per il collettivo</span><span class="lang-en">For the collective</span></h3><div class="big">64</div><p><span class="lang-it">misure dove il gruppo conta: 28 solo in gruppo o come partner, 36 aperte a tutti ma con i gruppi favoriti. Qui stanno la promozione OCM, le fiere in forma aggregata, enoturismo, ricerca.</span><span class="lang-en">measures where the group matters: 28 group or partner only, 36 open to all but favouring groups. CMO promotion, shared fair stands, wine tourism and research sit here.</span></p><span class="chip"><span class="lang-it">filtro "Chi presenta" · Solo in gruppo / Gruppi favoriti</span><span class="lang-en">"Who applies" filter · Group only / Groups favoured</span></span></div>
+      <div class="path s r" style="--d:1.6"><h3><span class="lang-it">Per la singola cantina</span><span class="lang-en">For a single winery</span></h3><div class="big">122</div><p><span class="lang-it">misure a cui ogni cantina può accedere da sola: investimenti in cantina e in vigneto, sviluppo rurale e GAL della propria zona, SIMEST, servizi ICE, crediti d'imposta.</span><span class="lang-en">measures each winery can use on its own: cellar and vineyard investments, rural development and local LEADER calls, SIMEST, ICE services, tax credits.</span></p><span class="chip"><span class="lang-it">filtro "Regione" + "La singola cantina"</span><span class="lang-en">"Region" filter + "A winery alone"</span></span></div>
+    </div>
+    <div class="ui r" style="--d:2.4"><span class="k"><span class="lang-it">Filtra per</span><span class="lang-en">Filter by</span></span><span><span class="lang-it">regione</span><span class="lang-en">region</span></span><span><span class="lang-it">tema</span><span class="lang-en">topic</span></span><span><span class="lang-it">stato</span><span class="lang-en">status</span></span><span><span class="lang-it">chi presenta</span><span class="lang-en">who applies</span></span><span><span class="lang-it">contributo massimo</span><span class="lang-en">maximum grant</span></span><span><span class="lang-it">priorità 1-4</span><span class="lang-en">priority 1–4</span></span></div>
+  </section>
+
+  <!-- 10 -->
+  <section class="scene" data-dur="12">
+    <div class="eyebrow r"><span class="lang-it">Prossimi passi</span><span class="lang-en">Next steps</span></div>
+    <h2 class="r" style="--d:.3"><span class="lang-it">Da qui si parte</span><span class="lang-en">Where we start</span></h2>
+    <ol class="next r" style="--d:.9">
+      <li><span class="lang-it"><b>Subito</b>: scegliere insieme la visione del gruppo, la direzione a breve e le priorità.</span><span class="lang-en"><b>First</b>: agree together on the group's vision, short-term direction and priorities.</span></li>
+      <li><span class="lang-it"><b>Entro dicembre</b>: elenco delle cantine con regione e codice ATECO, per mettere in primo piano le regioni giuste.</span><span class="lang-en"><b>By December</b>: list of wineries with region and ATECO code, to put the right regions up front.</span></li>
+      <li><span class="lang-it"><b>Inverno</b>: scegliere la forma del gruppo e la regione capofila per un progetto di promozione multiregionale.</span><span class="lang-en"><b>Winter</b>: choose the group's legal form and a lead region for a multi-regional promotion project.</span></li>
+    </ol>
+    <div class="r" style="--d:1.6"><div class="eyebrow" style="margin-bottom:6px"><span class="lang-it">Il radar</span><span class="lang-en">The radar</span></div><div class="link">bertanipaolo-cloud.github.io/piccole-cantine</div></div>
+  </section>
+
+</div>
+
+<div class="bar">
+  <button type="button" id="prev" aria-label="Previous scene">◀</button>
+  <button type="button" id="play">Pausa</button>
+  <button type="button" id="next" aria-label="Next scene">▶</button>
+  <div class="prog" id="prog" role="tablist" aria-label="Scenes"></div>
+  <button type="button" id="lang">EN</button>
+</div>
+<p class="cap" id="cap"></p>
+</div>
+
+<script>
+(function(){
+  const scenes=[...document.querySelectorAll(".scene")];
+  const prog=document.getElementById("prog");
+  const playBtn=document.getElementById("play"), langBtn=document.getElementById("lang"), cap=document.getElementById("cap");
+  let i=0, playing=true, t0=0, elapsed=0, raf=0;
+  let lang="it"; try{const s=localStorage.getItem("pcu-motion-lang"); if(s==="en"||s==="it") lang=s;}catch(e){}
+  const bars=scenes.map((s,k)=>{const b=document.createElement("button");b.type="button";b.setAttribute("aria-label","Scene "+(k+1));b.innerHTML="<i></i>";b.onclick=()=>go(k);prog.appendChild(b);return b;});
+  function setLang(l){lang=l;document.documentElement.setAttribute("data-lang",l);langBtn.textContent=l==="it"?"EN":"IT";playBtn.textContent=playing?(l==="it"?"Pausa":"Pause"):(l==="it"?"Play":"Play");cap.textContent=l==="it"?"Scorre da solo. Clicca una barra per andare a una scena; ◀ ▶ o le frecce della tastiera per spostarti.":"Plays on its own. Click a bar to jump to a scene; use ◀ ▶ or the arrow keys to move.";try{localStorage.setItem("pcu-motion-lang",l);}catch(e){}}
+  function go(k){
+    scenes[i].classList.remove("on");
+    i=(k+scenes.length)%scenes.length;
+    void scenes[i].offsetWidth;
+    scenes[i].classList.add("on");
+    bars.forEach((b,n)=>{b.classList.toggle("done",n<i);b.querySelector("i").style.width=n<i?"100%":"0";});
+    elapsed=0; t0=performance.now();
+  }
+  function tick(now){
+    if(playing){
+      const dur=(+scenes[i].dataset.dur||8)*1000;
+      const e=elapsed+(now-t0);
+      bars[i].querySelector("i").style.width=Math.min(100,e/dur*100)+"%";
+      if(e>=dur){ if(i<scenes.length-1){go(i+1);} else {playing=false;setLang(lang);} }
+    }
+    raf=requestAnimationFrame(tick);
+  }
+  function toggle(){
+    if(playing){elapsed+=performance.now()-t0;playing=false;}
+    else{ if(i===scenes.length-1&&elapsed>=(+scenes[i].dataset.dur*1000)) go(0); t0=performance.now();playing=true;}
+    setLang(lang);
+  }
+  playBtn.onclick=toggle;
+  document.getElementById("prev").onclick=()=>go(i-1);
+  document.getElementById("next").onclick=()=>go(i+1);
+  langBtn.onclick=()=>setLang(lang==="it"?"en":"it");
+  document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(i+1);else if(e.key==="ArrowLeft")go(i-1);else if(e.key===" "&&e.target===document.body){e.preventDefault();toggle();}});
+  setLang(lang);
+  scenes[0].classList.add("on"); t0=performance.now();
+  raf=requestAnimationFrame(tick);
+})();
+</script>
+</body></html>
